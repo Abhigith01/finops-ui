@@ -85,12 +85,30 @@ const Dashboard = () => {
             </Grid>
 
 
-            <Grid container spacing={2}>
-                <Grid size={3}><CostOptimizationSummary /></Grid>
-                <Grid size={5}><OptimizationRecommendations /></Grid>
-                <Grid size={2}><GaugeChart label="Policy compliance" value={89} /></Grid>
-                <Grid size={2}><GaugeChart label="Team Collaboration" value={94} /></Grid>
+            <Grid container spacing={2} alignItems="stretch">
+                <Grid size={4}>
+                    <Box height="100%">
+                        <CostOptimizationSummary />
+                    </Box>
+                </Grid>
+                <Grid size={5}>
+                    <Box height="100%">
+                        <OptimizationRecommendations />
+                    </Box>
+                </Grid>
+                <Grid size={3}>
+                    <Grid container direction="column" spacing={2} style={{ height: '100%' }}>
+                        <Grid style={{ flex: 1 }}>
+                            <GaugeChart label="Policy compliance" value={89} />
+                        </Grid>
+                        <Grid style={{ flex: 1 }}>
+                            <GaugeChart label="Team Collaboration" value={94} />
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
+
+
         </Box>
     );
 };
