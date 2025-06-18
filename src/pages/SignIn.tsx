@@ -20,7 +20,7 @@ const SignInPage = () => {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault(); // prevent page reload
         // Dummy validation
-        if (email === 'admin@example.com' && password === 'password123') {
+        if (email === 'admin@gmail.com' && password === 'admin123') {
             localStorage.setItem('authToken', 'dummy-token');
             navigate('/dashboard');
         } else {
