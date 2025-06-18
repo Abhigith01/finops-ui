@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import {
-    Typography, Box, FormControl, InputLabel, Select, MenuItem,
+    Typography, Box, FormControl, Select, MenuItem,
     Grid, Button
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -80,8 +80,8 @@ const Dashboard = () => {
 
 
             <Grid container spacing={2} mb={3}>
-                <Grid size={6}><CostByApplications /></Grid>
-                <Grid size={6}><CostVsBudgetChart /></Grid>
+                <Grid size={7}><CostByApplications /></Grid>
+                <Grid size={5}><CostVsBudgetChart /></Grid>
             </Grid>
 
 

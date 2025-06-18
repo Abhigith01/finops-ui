@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import {
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+    ResponsiveContainer, ReferenceLine, Cell
 } from 'recharts';
 
 const data = [
@@ -26,9 +27,28 @@ const CostVsBudgetChart = () => {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="quarter" />
                         <YAxis />
-                        <Tooltip />
-                        <ReferenceLine y={budget} stroke="red" strokeDasharray="3 3" label={`Budget $${budget.toLocaleString()}`} />
-                        <Bar dataKey="cost" fill="#42a5f5" />
+                        <Tooltip formatter={(value: number) => `$${value.toLocaleString()}`} />
+                        <ReferenceLine
+                            y={budget}
+                            stroke="red"
+                            strokeDasharray="3 3"
+                            label={{
+                                position: 'top',
+                                value: `Budget $${budget.toLocaleString()}`,
+                                fill: 'black',
+                                fontSize: 16,
+                                fontWeight: 700,
+                            }}
+                        />
+                        <Bar dataKey="cost" barSize={30}>
+                            {data.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill="#42a5f5"
+                                    fillOpacity={entry.cost > budget ? 0.4 : 1}
+                                />
+                            ))}
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>

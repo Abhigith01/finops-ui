@@ -19,11 +19,11 @@ const CostByApplications = () => {
                     Cost By Applications
                 </Typography>
                 <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={data}>
+                    <BarChart data={data} barSize={14}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="quarter" />
-                        <YAxis />
-                        <Tooltip />
+                        <YAxis tickFormatter={(value) => `$${value}`} />
+                        <Tooltip formatter={(value: number) => [`$${value}`, '']} />
                         <Legend />
                         <Bar dataKey="Az1" fill="#42a5f5" name="Az-ap-0001" />
                         <Bar dataKey="Az2" fill="#ab47bc" name="Az-ap-0002" />
