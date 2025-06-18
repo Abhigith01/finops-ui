@@ -4,7 +4,7 @@ import {
     Grid, Button
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // assuming this is your context path
+import { useAuth } from '../context/AuthContext';
 import StatCard from '../components/StatCard';
 import CostByApplications from '../components/CostByApplications';
 import CostVsBudgetChart from '../components/CostVsBudgetChart';
@@ -22,8 +22,8 @@ const Dashboard = () => {
     };
 
     return (
-        <Box p={3}>
-            {/* Header with Logout */}
+        <Box p={3} sx={{ backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
+
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <Typography variant="h5">Overview</Typography>
                 <Button variant="outlined" color="error" onClick={handleLogout}>
@@ -31,44 +31,60 @@ const Dashboard = () => {
                 </Button>
             </Box>
 
-            {/* Filters */}
             <Box display="flex" gap={2} mb={3}>
-                <FormControl size="small">
-                    <InputLabel>Period</InputLabel>
-                    <Select defaultValue="Quarterly-2024" label="Period">
-                        <MenuItem value="Quarterly-2024">Quarterly-2024</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl size="small">
-                    <InputLabel>Product Line</InputLabel>
-                    <Select defaultValue="All" label="Product Line">
-                        <MenuItem value="All">All</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl size="small">
-                    <InputLabel>Application</InputLabel>
-                    <Select defaultValue="All" label="Application">
-                        <MenuItem value="All">All</MenuItem>
-                    </Select>
-                </FormControl>
+
+                <Box display="flex" alignItems="center" gap={1}>
+                    <Typography variant="body2">
+                        Period:
+                    </Typography>
+                    <FormControl size="small" sx={{ minWidth: 180 }}>
+                        <Select defaultValue="Quarterly-2024">
+                            <MenuItem value="Quarterly-2024">Quarterly-2024</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+
+
+                <Box display="flex" alignItems="center" gap={1}>
+                    <Typography variant="body2" sx={{ minWidth: 80 }}>
+                        Product Line:
+                    </Typography>
+                    <FormControl size="small" sx={{ minWidth: 180 }}>
+                        <Select defaultValue="All">
+                            <MenuItem value="All">All</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+
+
+                <Box display="flex" alignItems="center" gap={1}>
+                    <Typography variant="body2" sx={{ minWidth: 80 }}>
+                        Application:
+                    </Typography>
+                    <FormControl size="small" sx={{ minWidth: 180 }}>
+                        <Select defaultValue="All">
+                            <MenuItem value="All">All</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
             </Box>
 
-            {/* Stat Cards */}
+
             <Grid container spacing={2} mb={3}>
-                <Grid size={2.4}><StatCard label="Total Cloud Spend" value="$120,000" chip="-5%" negative /></Grid>
-                <Grid size={2.4}><StatCard label="Cost Savings Potential" value="$15,000" chip="+8%" positive /></Grid>
+                <Grid size={2.4}><StatCard label="Total Cloud Spend" value="$120,000" chip="-5%" cardColor='#F44336' negative /></Grid>
+                <Grid size={2.4}><StatCard label="Cost Savings Potential" value="$15,000" chip="+8%" cardColor='#4CAF50'  positive /></Grid>
                 <Grid size={2.4}><StatCard label="Active Cost Anomalies" value="5 Alerts" /></Grid>
-                <Grid size={2.4}><StatCard label="Utilization Efficiency" value="78%" chip="+3%" positive /></Grid>
-                <Grid size={2.4}><StatCard label="Untagged Resources" value="3,875" chip="-0.9%" negative /></Grid>
+                <Grid size={2.4}><StatCard label="Utilization Efficiency" value="78%" chip="+3%" cardColor='#4CAF50'  positive /></Grid>
+                <Grid size={2.4}><StatCard label="Untagged Resources" value="3,875" chip="-0.9%" cardColor='#F44336'  negative /></Grid>
             </Grid>
 
-            {/* Charts */}
+
             <Grid container spacing={2} mb={3}>
                 <Grid size={6}><CostByApplications /></Grid>
                 <Grid size={6}><CostVsBudgetChart /></Grid>
             </Grid>
 
-            {/* Summary & Gauges */}
+
             <Grid container spacing={2}>
                 <Grid size={3}><CostOptimizationSummary /></Grid>
                 <Grid size={5}><OptimizationRecommendations /></Grid>
