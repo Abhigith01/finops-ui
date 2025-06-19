@@ -19,6 +19,10 @@ import { ReactComponent as SidebarUsersIcon } from '../assets/User-Icon.svg';
 import { ReactComponent as SidebarDocIcon } from '../assets/Reports-Icon.svg';
 import { ReactComponent as NotificationSvgIcon } from '../assets/Notification-Icon.svg';
 import { ReactComponent as GridViewIcon } from '../assets/GridView-Icon.svg';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
 
 
 const SidebarAddIcon = () => (
@@ -39,25 +43,8 @@ const Dashboard = () => {
     };
 
     const [period, setPeriod] = useState('Quarterly-2024');
-    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-    const [fromQuarter, setFromQuarter] = useState('Q1');
-    const [toQuarter, setToQuarter] = useState('Q4');
-
-
-    const handleFromChange = (event: any) => {
-        const value = event.target.value;
-        setFromQuarter(value);
-        if (quarters.indexOf(value) > quarters.indexOf(toQuarter)) {
-            setToQuarter(value);
-        }
-    };
-    const handleToChange = (event: any) => {
-        const value = event.target.value;
-        setToQuarter(value);
-        if (quarters.indexOf(value) < quarters.indexOf(fromQuarter)) {
-            setFromQuarter(value);
-        }
-    };
+    const [fromDate, setFromDate] = useState<Dayjs | null>(dayjs().startOf('year'));
+    const [toDate, setToDate] = useState<Dayjs | null>(dayjs());
 
     return (
         <Box sx={{ display: 'flex', backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
@@ -132,7 +119,7 @@ const Dashboard = () => {
                 </List>
             </Drawer>
 
-            <Box sx={{ flexGrow: 1, ml: `${54}px` }}>
+            <Box sx={{ flexGrow: 1, pl: 1 }}>
 
                 <AppBar position="fixed" color="inherit" elevation={1} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, ml: `${54}px` }}>
                     <Toolbar sx={{ minHeight: 64, display: 'flex', justifyContent: 'space-between' }}>
@@ -167,64 +154,70 @@ const Dashboard = () => {
                         <Typography variant="h5">Overview for Cloud Architecture</Typography>
                     </Box>
 
-                    <Box display="flex" gap={2} mb={3}>
-                        <Box display="flex" alignItems="center" gap={1}>
-                            <Typography variant="body2">
-                                Period:
-                            </Typography>
-                            <FormControl size="small" sx={{ minWidth: 180 }}>
-                                <Select value={period} onChange={e => setPeriod(e.target.value)}>
-                                    <MenuItem value="Quarterly-2024">Quarterly-2024</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        <Box display="flex" alignItems="center" gap={1}>
-                            <Typography variant="body2">From:</Typography>
-                            <FormControl size="small" sx={{ minWidth: 80 }}>
-                                <Select value={fromQuarter} onChange={handleFromChange}>
-                                    {quarters.map(q => (
-                                        <MenuItem key={q} value={q} disabled={quarters.indexOf(q) > quarters.indexOf(toQuarter)}>
-                                            {q}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <Typography variant="body2">To:</Typography>
-                            <FormControl size="small" sx={{ minWidth: 80 }}>
-                                <Select value={toQuarter} onChange={handleToChange}>
-                                    {quarters.map(q => (
-                                        <MenuItem key={q} value={q} disabled={quarters.indexOf(q) < quarters.indexOf(fromQuarter)}>
-                                            {q}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Box>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Box display="flex" gap={2} mb={3}>
 
+                            <Box display="flex" alignItems="center" gap={1}>
+                                <Typography variant="body2">
+                                    Period:
+                                </Typography>
+                                <FormControl size="small" sx={{ minWidth: 120 }}>
+                                    <Select value={period} onChange={e => setPeriod(e.target.value)}>
+                                        <MenuItem value="Quarterly-2024">Quarterly-2024</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
 
-                        <Box display="flex" alignItems="center" gap={1}>
-                            <Typography variant="body2" sx={{ minWidth: 80 }}>
-                                Business Unit:
-                            </Typography>
-                            <FormControl size="small" sx={{ minWidth: 180 }}>
-                                <Select defaultValue="All">
-                                    <MenuItem value="All">All</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Box display="flex" alignItems="center" gap={1}>
+                                <Typography variant="body2">From:</Typography>
+                                <DatePicker
+                                    value={fromDate}
+                                    onChange={newValue => {
+                                        setFromDate(newValue);
+                                        if (toDate && newValue && newValue.isAfter(toDate)) {
+                                            setToDate(newValue);
+                                        }
+                                    }}
+                                    maxDate={toDate || undefined}
+                                    slotProps={{ textField: { size: 'small', sx: { minWidth: 100 } } }}
+                                />
+                                <Typography variant="body2">To:</Typography>
+                                <DatePicker
+                                    value={toDate}
+                                    onChange={newValue => {
+                                        setToDate(newValue);
+                                        if (fromDate && newValue && newValue.isBefore(fromDate)) {
+                                            setFromDate(newValue);
+                                        }
+                                    }}
+                                    minDate={fromDate || undefined}
+                                    slotProps={{ textField: { size: 'small', sx: { minWidth: 100 } } }}
+                                />
+                            </Box>
+
+                            <Box display="flex" alignItems="center" gap={1}>
+                                <Typography variant="body2" sx={{ minWidth: 80 }}>
+                                    Business Unit:
+                                </Typography>
+                                <FormControl size="small" sx={{ minWidth: 120 }}>
+                                    <Select defaultValue="All">
+                                        <MenuItem value="All">All</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+
+                            <Box display="flex" alignItems="center" gap={1}>
+                                <Typography variant="body2" sx={{ minWidth: 80 }}>
+                                    Application:
+                                </Typography>
+                                <FormControl size="small" sx={{ minWidth: 120 }}>
+                                    <Select defaultValue="All">
+                                        <MenuItem value="All">All</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
                         </Box>
-
-
-                        <Box display="flex" alignItems="center" gap={1}>
-                            <Typography variant="body2" sx={{ minWidth: 80 }}>
-                                Application:
-                            </Typography>
-                            <FormControl size="small" sx={{ minWidth: 180 }}>
-                                <Select defaultValue="All">
-                                    <MenuItem value="All">All</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </Box>
+                    </LocalizationProvider>
 
 
                     <Grid container spacing={2} mb={3}>
