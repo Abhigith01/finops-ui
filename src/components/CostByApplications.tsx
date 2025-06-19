@@ -16,7 +16,7 @@ const CostByApplications = () => {
         <Card variant="outlined">
             <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                    Cost By Applications
+                    Cost Summary
                 </Typography>
                 <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={data} barSize={14}>
